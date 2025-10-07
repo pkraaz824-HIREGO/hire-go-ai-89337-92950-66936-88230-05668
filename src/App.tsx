@@ -10,6 +10,8 @@ import Auth from "./pages/Auth";
 import CandidateDashboard from "./pages/candidate/DashboardWithTabs";
 import CandidateProfile from "./pages/candidate/Profile";
 import CandidateOnboarding from "./pages/candidate/Onboarding";
+import VideoIntroduction from "./pages/candidate/VideoIntroduction";
+import InterviewQuestions from "./pages/candidate/InterviewQuestions";
 import EmployerDashboard from "./pages/employer/DashboardWithTabs";
 import EmployerOnboarding from "./pages/employer/Onboarding";
 import PostJob from "./pages/employer/PostJob";
@@ -41,6 +43,16 @@ const App = () => (
             <Route path="/candidate/onboarding" element={
               <ProtectedRoute allowedRole="candidate">
                 <CandidateOnboarding />
+              </ProtectedRoute>
+            } />
+            <Route path="/candidate/video-introduction" element={
+              <ProtectedRoute allowedRole="candidate">
+                <VideoIntroduction />
+              </ProtectedRoute>
+            } />
+            <Route path="/candidate/interview-questions" element={
+              <ProtectedRoute allowedRole="candidate">
+                <InterviewQuestions />
               </ProtectedRoute>
             } />
             <Route path="/employer/dashboard" element={

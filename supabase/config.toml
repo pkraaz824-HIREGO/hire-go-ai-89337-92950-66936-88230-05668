@@ -1,1 +1,22 @@
 project_id = "ielovtxpjuifgthncmth"
+
+[functions.evaluate-candidate-video]
+verify_jwt = false
+
+[functions.assign-interview-questions]
+verify_jwt = true
+
+[functions.transcribe-video-audio]
+verify_jwt = false
+
+[functions.generate-job-description]
+verify_jwt = true
+
+[functions.generate-resume-insights]
+verify_jwt = true
+
+[functions.match-candidates]
+verify_jwt = true
+
+[functions.schedule-interview]
+verify_jwt = true
