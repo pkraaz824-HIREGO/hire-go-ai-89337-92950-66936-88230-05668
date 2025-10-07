@@ -1,0 +1,170 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 220 25% 98%;
+    --foreground: 217 33% 17%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 217 33% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 217 33% 17%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 95% 93%;
+    --secondary-foreground: 217 33% 17%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 191 97% 77%;
+    --accent-foreground: 217 33% 17%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%;
+
+    --radius: 0.75rem;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(221 83% 53%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(191 97% 77%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(221 83% 53%) 50%, hsl(191 97% 77%) 100%);
+    
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 20px hsl(217 91% 60% / 0.3);
+    
+    --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Glassy Effects */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --glass-blur: blur(8px);
+    
+    --gradient-background: linear-gradient(135deg, hsl(217 91% 95%) 0%, hsl(221 83% 97%) 50%, hsl(191 97% 96%) 100%);
+    
+    /* Enhanced 3D Card Effects */
+    --card-3d-shadow: 0 20px 60px -15px hsl(217 91% 60% / 0.4), 
+                      0 10px 40px -10px hsl(217 91% 60% / 0.3),
+                      0 5px 20px -5px hsl(217 91% 60% / 0.2),
+                      inset 0 -2px 4px hsl(217 91% 60% / 0.05);
+    --card-3d-hover-shadow: 0 35px 90px -20px hsl(217 91% 60% / 0.6),
+                            0 20px 60px -15px hsl(217 91% 60% / 0.5),
+                            0 10px 35px -8px hsl(217 91% 60% / 0.4),
+                            inset 0 -3px 6px hsl(217 91% 60% / 0.08);
+    --card-border-glow: 0 0 0 1px hsl(217 91% 60% / 0.3),
+                        0 0 25px hsl(217 91% 60% / 0.15),
+                        inset 0 1px 0 hsl(0 0% 100% / 0.5);
+    
+    /* 3D Transform Effects */
+    --transform-3d: perspective(1000px);
+    --rotate-3d-x: rotateX(2deg);
+    --rotate-3d-y: rotateY(2deg);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 217 33% 17%;
+    --foreground: 0 0% 100%;
+
+    --card: 217 24% 20%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 217 24% 20%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217 24% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 217 24% 25%;
+    --muted-foreground: 215 16% 65%;
+
+    --accent: 191 97% 77%;
+    --accent-foreground: 217 33% 17%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 24% 25%;
+    --input: 217 24% 25%;
+    --ring: 217 91% 60%;
+    
+    --sidebar-background: 217 33% 15%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 217 24% 20%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 217 24% 25%;
+    --sidebar-ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-weight: 500;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+  }
+  
+  .card-3d {
+    transform-style: preserve-3d;
+    transform: var(--transform-3d);
+  }
+  
+  .card-3d-hover:hover {
+    transform: var(--transform-3d) translateY(-8px) var(--rotate-3d-x);
+  }
+  
+  .glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  
+  .gradient-bg {
+    background: var(--gradient-background);
+  }
+}
