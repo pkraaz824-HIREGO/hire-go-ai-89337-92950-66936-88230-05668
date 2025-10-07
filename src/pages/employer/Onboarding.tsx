@@ -75,14 +75,9 @@ export default function EmployerOnboarding() {
         return;
       }
 
-      // @ts-ignore - Supabase types will auto-regenerate
       const { error } = await supabase
-        // @ts-ignore
         .from("profiles")
-        // @ts-ignore
-        .upsert({
-          // @ts-ignore
-          user_id: user.id,
+        .update({
           company_name: values.companyName,
           email: values.companyEmail,
           phone: values.companyPhone,
@@ -100,7 +95,8 @@ export default function EmployerOnboarding() {
           pincode: values.pincode,
           role: "employer",
           is_verified: false,
-        });
+        })
+        .eq('user_id', user.id);
 
       if (error) throw error;
 
