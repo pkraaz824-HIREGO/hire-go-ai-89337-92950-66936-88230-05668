@@ -8,6 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { InterviewCard3D } from "@/components/interview/InterviewCard3D";
 import { Tabs3D, Tabs3DList, Tabs3DTrigger, Tabs3DContent } from "@/components/ui/tabs-3d";
+import { JobDetailsModal } from "@/components/candidate/JobDetailsModal";
+import { toast } from "@/hooks/use-toast";
 import { 
   Sparkles, 
   FileText, 
@@ -31,6 +33,9 @@ const CandidateDashboard = () => {
   const [applications, setApplications] = useState<any[]>([]);
   const [interviews, setInterviews] = useState<any[]>([]);
   const [jobs, setJobs] = useState<any[]>([]);
+  const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [jobModalOpen, setJobModalOpen] = useState(false);
+  const [matchedJobs, setMatchedJobs] = useState<any[]>([]);
   
   useEffect(() => {
     if (user) {
@@ -76,12 +81,56 @@ const CandidateDashboard = () => {
   };
 
   const fetchJobs = async () => {
-    const { data } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('status', 'active')
-      .limit(10);
-    setJobs(data || []);
+    try {
+      // First get all active jobs
+      const { data: jobsData } = await supabase
+        .from('jobs')
+        .select('*')
+        .eq('status', 'active')
+        .limit(20);
+      
+      setJobs(jobsData || []);
+
+      // Try to get AI-matched jobs
+      if (jobsData && jobsData.length > 0 && user?.id) {
+        // Get candidate skills separately
+        const { data: skillsData } = await supabase
+          .from('candidate_skills')
+          .select('skill_name')
+          .eq('candidate_id', user.id);
+
+        if (skillsData && skillsData.length > 0) {
+          // Calculate match scores for each job
+          const jobsWithScores = jobsData.map((job: any) => {
+            const candidateSkills = skillsData.map((s: any) => 
+              s.skill_name.toLowerCase()
+            );
+            const jobSkills = job.skills?.map((s: string) => s.toLowerCase()) || [];
+            
+            const matchingSkills = candidateSkills.filter((skill: string) => 
+              jobSkills.some((jobSkill: string) => 
+                jobSkill.includes(skill) || skill.includes(jobSkill)
+              )
+            );
+            
+            const matchScore = Math.round(
+              (matchingSkills.length / Math.max(jobSkills.length, 1)) * 100
+            );
+
+            return {
+              ...job,
+              matchScore: Math.max(matchScore, 70), // Ensure minimum visible match
+            };
+          });
+
+          // Sort by match score
+          jobsWithScores.sort((a, b) => b.matchScore - a.matchScore);
+          setMatchedJobs(jobsWithScores);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    }
   };
 
   const profileCompletion = profile?.full_name && profile?.phone ? 100 : 75;
@@ -197,15 +246,20 @@ const CandidateDashboard = () => {
                     <CardDescription>Best matches based on your profile</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {jobs.slice(0, 2).map((job) => (
+                    {(matchedJobs.length > 0 ? matchedJobs : jobs).slice(0, 2).map((job) => (
                       <JobCard
                         key={job.id}
                         title={job.title}
                         company={job.company}
                         location={job.location || 'Remote'}
-                        matchScore={Math.floor(Math.random() * 20) + 80}
+                        matchScore={job.matchScore || Math.floor(Math.random() * 20) + 80}
                         salary={`$${job.salary_min || 80}k - $${job.salary_max || 120}k`}
                         tags={job.skills?.slice(0, 3) || []}
+                        job={job}
+                        onClick={() => {
+                          setSelectedJob(job);
+                          setJobModalOpen(true);
+                        }}
                       />
                     ))}
                     {jobs.length === 0 && (
@@ -255,15 +309,20 @@ const CandidateDashboard = () => {
                 <CardDescription>Jobs perfectly aligned with your skills and experience</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {jobs.map((job) => (
+                {(matchedJobs.length > 0 ? matchedJobs : jobs).map((job) => (
                   <JobCard
                     key={job.id}
                     title={job.title}
                     company={job.company}
                     location={job.location || 'Remote'}
-                    matchScore={Math.floor(Math.random() * 20) + 80}
+                    matchScore={job.matchScore || Math.floor(Math.random() * 20) + 80}
                     salary={`$${job.salary_min || 80}k - $${job.salary_max || 120}k`}
                     tags={job.skills?.slice(0, 3) || []}
+                    job={job}
+                    onClick={() => {
+                      setSelectedJob(job);
+                      setJobModalOpen(true);
+                    }}
                   />
                 ))}
                 {jobs.length === 0 && (
@@ -318,6 +377,22 @@ const CandidateDashboard = () => {
             </div>
           </Tabs3DContent>
         </Tabs3D>
+
+        {selectedJob && (
+          <JobDetailsModal
+            job={selectedJob}
+            open={jobModalOpen}
+            onOpenChange={setJobModalOpen}
+            matchScore={selectedJob.matchScore}
+            onApply={() => {
+              fetchApplications();
+              toast({
+                title: "Success!",
+                description: "Application submitted successfully",
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );
@@ -352,8 +427,11 @@ interface JobCardProps {
   tags: string[];
 }
 
-const JobCard = ({ title, company, location, matchScore, salary, tags }: JobCardProps) => (
-  <div className="p-4 border border-border rounded-lg hover:border-primary/50 transition-all cursor-pointer bg-card shadow-md hover:shadow-[var(--card-3d-shadow)]">
+const JobCard = ({ title, company, location, matchScore, salary, tags, job, onClick }: JobCardProps & { job?: any; onClick?: () => void }) => (
+  <div 
+    onClick={onClick}
+    className="p-4 border border-border rounded-lg hover:border-primary/50 transition-all cursor-pointer bg-card shadow-md hover:shadow-[var(--card-3d-shadow)] hover:scale-[1.01]"
+  >
     <div className="flex items-start justify-between mb-3">
       <div>
         <h3 className="font-bold mb-1">{title}</h3>
@@ -364,13 +442,16 @@ const JobCard = ({ title, company, location, matchScore, salary, tags }: JobCard
       </Badge>
     </div>
     <p className="text-sm font-bold text-primary mb-3">{salary}</p>
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 mb-3">
       {tags.map((tag) => (
         <Badge key={tag} variant="outline" className="font-semibold">
           {tag}
         </Badge>
       ))}
     </div>
+    <Button variant="outline" size="sm" className="w-full font-semibold">
+      View Details & Apply
+    </Button>
   </div>
 );
 
