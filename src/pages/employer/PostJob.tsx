@@ -491,26 +491,28 @@ export default function PostJob() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => form.handleSubmit((data) => onSubmit(data, true))()}
-                  disabled={loading}
-                  size="lg"
-                  className="flex-1 hover:scale-[1.02] transition-transform"
-                >
-                  💾 Save as Draft
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={loading}
-                  variant="gradient"
-                  size="lg"
-                  className="flex-1 hover:scale-[1.02] transition-transform"
-                >
-                  {loading ? "Posting..." : "📢 Publish Job Now"}
-                </Button>
+              <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border/50 -mx-8 -mb-8 px-8 py-6 mt-8">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => form.handleSubmit((data) => onSubmit(data, true))()}
+                    disabled={loading}
+                    size="lg"
+                    className="flex-1 hover:scale-[1.02] transition-transform"
+                  >
+                    💾 Save as Draft
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    variant="gradient"
+                    size="lg"
+                    className="flex-1 hover:scale-[1.02] transition-transform shadow-lg"
+                  >
+                    {loading ? "Posting..." : "📢 Publish Job Now"}
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>
