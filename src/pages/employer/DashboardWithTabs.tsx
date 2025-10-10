@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { InterviewCard3D } from "@/components/interview/InterviewCard3D";
 import { Tabs3D, Tabs3DList, Tabs3DTrigger, Tabs3DContent } from "@/components/ui/tabs-3d";
+import { JobPipelineEnhanced } from "@/components/employer/JobPipelineEnhanced";
 import { toast } from "@/hooks/use-toast";
 import {
   Sparkles,
@@ -297,38 +298,63 @@ const EmployerDashboard = () => {
           </Tabs3DContent>
 
           <Tabs3DContent value="jobs">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5" />
-                  Active Jobs Pipeline
-                </CardTitle>
-                <CardDescription>Track applications and progress for each position</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <JobPipelineCard
-                  title="Senior React Developer"
-                  applicants={45}
-                  shortlisted={12}
-                  interviewed={5}
-                  offered={1}
-                />
-                <JobPipelineCard
-                  title="Backend Engineer"
-                  applicants={38}
-                  shortlisted={10}
-                  interviewed={3}
-                  offered={0}
-                />
-                <JobPipelineCard
-                  title="Full Stack Developer"
-                  applicants={52}
-                  shortlisted={15}
-                  interviewed={7}
-                  offered={2}
-                />
-              </CardContent>
-            </Card>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between mb-2">
+                <div>
+                  <h2 className="text-2xl font-bold flex items-center gap-2">
+                    <Briefcase className="h-6 w-6 text-primary" />
+                    Active Jobs Pipeline
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Track applications, progress, and final outcomes for each position
+                  </p>
+                </div>
+              </div>
+              
+              <JobPipelineEnhanced
+                title="Senior React Developer"
+                applicants={45}
+                shortlisted={12}
+                interviewed={5}
+                offered={1}
+                candidates={[
+                  { id: '1', name: 'Sarah Johnson', status: 'selected', feedback: 'Excellent technical skills and culture fit' },
+                  { id: '2', name: 'John Smith', status: 'rejected', feedback: 'Lacks required experience' },
+                  { id: '3', name: 'Alice Brown', status: 'on_hold', feedback: 'Strong candidate, waiting for final interview' },
+                  { id: '4', name: 'Bob Wilson', status: 'pending_decision', feedback: '' },
+                  { id: '5', name: 'Emma Davis', status: 'rejected', feedback: 'Not aligned with team requirements' },
+                ]}
+              />
+              
+              <JobPipelineEnhanced
+                title="Backend Engineer"
+                applicants={38}
+                shortlisted={10}
+                interviewed={3}
+                offered={0}
+                candidates={[
+                  { id: '6', name: 'Michael Chen', status: 'selected', feedback: 'Strong backend architecture skills' },
+                  { id: '7', name: 'Lisa Martinez', status: 'on_hold', feedback: 'Good candidate, reviewing compensation' },
+                  { id: '8', name: 'David Lee', status: 'pending_decision', feedback: '' },
+                ]}
+              />
+              
+              <JobPipelineEnhanced
+                title="Full Stack Developer"
+                applicants={52}
+                shortlisted={15}
+                interviewed={7}
+                offered={2}
+                candidates={[
+                  { id: '9', name: 'Emily Rodriguez', status: 'selected', feedback: 'Outstanding full-stack capabilities' },
+                  { id: '10', name: 'James Taylor', status: 'selected', feedback: 'Great fit for the team' },
+                  { id: '11', name: 'Sophia Anderson', status: 'rejected', feedback: 'Limited experience with our tech stack' },
+                  { id: '12', name: 'Oliver Thomas', status: 'on_hold', feedback: 'Awaiting reference checks' },
+                  { id: '13', name: 'Ava White', status: 'pending_decision', feedback: '' },
+                  { id: '14', name: 'Noah Harris', status: 'rejected', feedback: 'Looking for different role scope' },
+                ]}
+              />
+            </div>
           </Tabs3DContent>
 
           <Tabs3DContent value="interviews">
