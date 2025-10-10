@@ -117,10 +117,18 @@ const EmployerDashboard = () => {
                 <Plus className="mr-2 h-4 w-4" />
                 Post New Job
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => toast({ title: "Notifications", description: "No new notifications" })}
+              >
                 <Bell className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                onClick={() => toast({ title: "Settings", description: "Settings panel coming soon" })}
+              >
                 <Settings className="h-5 w-5" />
               </Button>
               <Button variant="ghost" size="icon" onClick={handleLogout}>
@@ -202,7 +210,10 @@ const EmployerDashboard = () => {
                   <CardContent>
                     <div className="flex gap-4">
                       <Input placeholder="Search by skills, role, or keywords..." className="flex-1 font-semibold" />
-                      <Button variant="hero">
+                      <Button 
+                        variant="hero"
+                        onClick={() => toast({ title: "AI Search", description: "Searching candidates with AI..." })}
+                      >
                         <Sparkles className="mr-2 h-4 w-4" />
                         AI Search
                       </Button>
@@ -245,11 +256,19 @@ const EmployerDashboard = () => {
                       <Plus className="mr-2 h-4 w-4" />
                       Post Job
                     </Button>
-                    <Button variant="outline" className="w-full justify-start font-bold">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start font-bold"
+                      onClick={() => toast({ title: "Browse Candidates", description: "Candidate browsing feature coming soon" })}
+                    >
                       <Users className="mr-2 h-4 w-4" />
                       Browse Candidates
                     </Button>
-                    <Button variant="outline" className="w-full justify-start font-bold">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start font-bold"
+                      onClick={() => toast({ title: "Schedule Interview", description: "Interview scheduling feature coming soon" })}
+                    >
                       <Calendar className="mr-2 h-4 w-4" />
                       Schedule Interview
                     </Button>
