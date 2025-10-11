@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { InterviewCard3D } from "@/components/interview/InterviewCard3D";
 import { Tabs3D, Tabs3DList, Tabs3DTrigger, Tabs3DContent } from "@/components/ui/tabs-3d";
 import { JobPipelineEnhanced } from "@/components/employer/JobPipelineEnhanced";
+import { CandidateCardEnhanced } from "@/components/employer/CandidateCardEnhanced";
+import { CandidateProfileModal } from "@/components/employer/CandidateProfileModal";
+import { mockCandidates, MockCandidate } from "@/data/mockCandidates";
 import { toast } from "@/hooks/use-toast";
 import {
   Sparkles,
@@ -32,6 +35,7 @@ const EmployerDashboard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<any>(null);
+  const [selectedCandidate, setSelectedCandidate] = useState<MockCandidate | null>(null);
   
   const activeJobs = 12;
   const totalCandidates = 248;
@@ -229,15 +233,27 @@ const EmployerDashboard = () => {
                     </CardTitle>
                     <CardDescription>Best matches for your open positions</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <CandidateCard
-                      name="Sarah Johnson"
-                      role="Senior Frontend Developer"
-                      matchScore={96}
-                      skills={["React", "TypeScript", "Next.js"]}
-                      experience="7 years"
-                      availability="Immediate"
-                    />
+                  <CardContent>
+                    <div className="grid gap-4">
+                      {mockCandidates.slice(0, 3).map((candidate) => (
+                        <CandidateCardEnhanced
+                          key={candidate.id}
+                          candidate={candidate}
+                          onClick={() => setSelectedCandidate(candidate)}
+                        />
+                      ))}
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      className="w-full mt-4 font-bold"
+                      onClick={() => {
+                        // This will switch to the candidates tab
+                        const candidatesTab = document.querySelector('[value="candidates"]') as HTMLElement;
+                        if (candidatesTab) candidatesTab.click();
+                      }}
+                    >
+                      View All Candidates →
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -279,41 +295,32 @@ const EmployerDashboard = () => {
           </Tabs3DContent>
 
           <Tabs3DContent value="candidates">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  AI Recommended Candidates
-                </CardTitle>
-                <CardDescription>Best matches for your open positions</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <CandidateCard
-                  name="Sarah Johnson"
-                  role="Senior Frontend Developer"
-                  matchScore={96}
-                  skills={["React", "TypeScript", "Next.js"]}
-                  experience="7 years"
-                  availability="Immediate"
-                />
-                <CandidateCard
-                  name="Michael Chen"
-                  role="Full Stack Engineer"
-                  matchScore={92}
-                  skills={["Node.js", "React", "PostgreSQL"]}
-                  experience="5 years"
-                  availability="2 weeks"
-                />
-                <CandidateCard
-                  name="Emily Rodriguez"
-                  role="UI/UX Developer"
-                  matchScore={88}
-                  skills={["React", "Figma", "CSS"]}
-                  experience="4 years"
-                  availability="1 month"
-                />
-              </CardContent>
-            </Card>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold flex items-center gap-2">
+                    <Sparkles className="h-6 w-6 text-primary" />
+                    Top Recommended Candidates
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    AI-powered matches based on your job requirements and hiring preferences
+                  </p>
+                </div>
+                <Badge variant="secondary" className="text-lg px-4 py-2">
+                  {mockCandidates.length} Available
+                </Badge>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {mockCandidates.map((candidate) => (
+                  <CandidateCardEnhanced
+                    key={candidate.id}
+                    candidate={candidate}
+                    onClick={() => setSelectedCandidate(candidate)}
+                  />
+                ))}
+              </div>
+            </div>
           </Tabs3DContent>
 
           <Tabs3DContent value="jobs">
@@ -468,6 +475,13 @@ const EmployerDashboard = () => {
           </Tabs3DContent>
         </Tabs3D>
       </div>
+
+      {/* Candidate Profile Modal */}
+      <CandidateProfileModal
+        candidate={selectedCandidate}
+        open={selectedCandidate !== null}
+        onClose={() => setSelectedCandidate(null)}
+      />
     </div>
   );
 };
