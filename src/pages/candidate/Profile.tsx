@@ -1,45 +1,90 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Sparkles, 
-  MapPin, 
   Share2, 
+  Play,
+  Calendar,
+  GraduationCap,
+  Briefcase,
+  Building2,
   Video,
-  FileText,
+  MessageSquare,
+  Brain,
   Award,
-  Github,
-  Linkedin,
-  ExternalLink,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  BookOpen,
-  TrendingUp
+  Target,
+  Code2,
+  Server,
+  Workflow,
+  Lightbulb
 } from "lucide-react";
-import {
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ResponsiveContainer,
-} from "recharts";
+import { toast } from "@/hooks/use-toast";
 
 const CandidateProfile = () => {
-  const profileCompletion = 85;
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   
-  const skillData = [
-    { subject: 'Technical', A: 90, fullMark: 100 },
-    { subject: 'Communication', A: 85, fullMark: 100 },
-    { subject: 'Soft Skills', A: 88, fullMark: 100 },
-    { subject: 'Interview', A: 82, fullMark: 100 },
-    { subject: 'Knowledge', A: 92, fullMark: 100 },
+  const candidateData = {
+    name: "Rahul Kumar",
+    role: "Full Stack Developer",
+    avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
+    dateOfBirth: "Mar 15, 1995",
+    education: "Bachelor of Science",
+    totalExperience: "5 years",
+    companies: "3 companies",
+    summary: "Rahul shows structured thinking, excellent confidence, and clear communication. Fit for client-facing or leadership roles.",
+  };
+
+  const aiSkills = [
+    { name: "Communication", score: 8.6, color: "bg-teal-500" },
+    { name: "Knowledge", score: 8.2, color: "bg-teal-500" },
+    { name: "Confidence", score: 9.1, color: "bg-teal-500" },
+    { name: "Behaviour", score: 8.4, color: "bg-teal-500" },
   ];
+
+  const keyHighlights = ["ReactJS", "CRM", "Empathy", "UI"];
+
+  const roleSpecificSkills = [
+    { name: "React.JS", icon: <Code2 className="h-5 w-5 text-cyan-400" />, score: 8.2 },
+    { name: "Node.js", icon: <Server className="h-5 w-5 text-green-500" />, score: 8.9 },
+    { name: "API Integration", icon: <Workflow className="h-5 w-5 text-blue-400" />, score: 8.3 },
+    { name: "Problem Solving", icon: <Lightbulb className="h-5 w-5 text-amber-400" />, score: 8.5 },
+  ];
+
+  const workHistory = [
+    {
+      company: "Tech Solutions",
+      role: "Full Stack Developer",
+      duration: "2021 - 2023",
+      icon: <Building2 className="h-5 w-5 text-muted-foreground" />,
+    },
+    {
+      company: "Innovatech",
+      role: "Software Engineer",
+      duration: "2018 - 2021",
+      icon: <Award className="h-5 w-5 text-muted-foreground" />,
+    },
+    {
+      company: "DevWorks",
+      role: "Junior Developer",
+      duration: "2016 - 2018",
+      note: "Left for higher opportunity",
+      icon: <Target className="h-5 w-5 text-muted-foreground" />,
+    },
+  ];
+
+  const handleShareProfile = () => {
+    const profileUrl = window.location.href;
+    navigator.clipboard.writeText(profileUrl);
+    toast({
+      title: "Link Copied!",
+      description: "Profile link has been copied to clipboard",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -55,314 +100,225 @@ const CandidateProfile = () => {
               <Link to="/candidate/dashboard">
                 <Button variant="ghost">Dashboard</Button>
               </Link>
-              <Button variant="ghost">Settings</Button>
+              <Button variant="outline" onClick={handleShareProfile} className="gap-2">
+                <Share2 className="h-4 w-4" />
+                Share Profile
+              </Button>
             </nav>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
-        {/* Profile Card */}
-        <Card className="glass-card border-primary/20 shadow-xl mb-8">
-          <CardContent className="p-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-              <Avatar className="h-32 w-32 border-4 border-primary/20">
-                <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
-              
-              <div className="flex-1 space-y-3">
-                <div>
-                  <h1 className="text-3xl font-bold mb-1">John Doe</h1>
-                  <p className="text-lg text-primary font-semibold">Senior Frontend Developer</p>
-                  <div className="flex items-center gap-2 mt-2 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    <span>San Francisco, CA</span>
-                  </div>
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Left Column */}
+          <div className="space-y-6">
+            {/* Profile Header Card */}
+            <Card className="glass-card border-border/50 p-8">
+              <div className="flex items-start gap-6">
+                <div className="relative">
+                  <Avatar className="h-32 w-32 border-4 border-background shadow-xl">
+                    <AvatarImage src={candidateData.avatar} />
+                    <AvatarFallback className="text-3xl">{candidateData.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <button 
+                    className="absolute bottom-0 right-0 w-12 h-12 bg-teal-500 hover:bg-teal-600 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-110"
+                    onClick={() => setIsVideoPlaying(true)}
+                  >
+                    <Play className="h-6 w-6 text-white fill-white ml-0.5" />
+                  </button>
                 </div>
-                
-                <p className="text-muted-foreground leading-relaxed">
-                  Passionate frontend developer with 5+ years of experience building responsive web applications. 
-                  Specialized in React, TypeScript, and modern UI frameworks. Love creating intuitive user experiences.
-                </p>
-                
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Profile Completion</span>
-                    <span className="text-sm font-bold text-primary">{profileCompletion}%</span>
+
+                <div className="flex-1 space-y-4">
+                  <div>
+                    <h1 className="text-4xl font-bold mb-1">{candidateData.name}</h1>
+                    <p className="text-xl text-muted-foreground">{candidateData.role}</p>
                   </div>
-                  <Progress value={profileCompletion} className="h-2" />
+
+                  <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-sm">
+                    <div>
+                      <p className="text-muted-foreground mb-1">Date of Birth</p>
+                      <p className="font-semibold">{candidateData.dateOfBirth}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground mb-1">Education</p>
+                      <p className="font-semibold">{candidateData.education}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground mb-1">Total Experience</p>
+                      <p className="font-semibold">{candidateData.totalExperience}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground mb-1">Join</p>
+                      <p className="font-semibold">{candidateData.companies}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-              
-              <Button className="bg-primary hover:bg-primary/90">
-                <Share2 className="mr-2 h-4 w-4" />
-                Share Profile Link
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-2 space-y-8">
-            {/* Video Resume */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Video className="h-5 w-5 text-primary" />
-                  Video Resume
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="aspect-video bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg flex items-center justify-center border border-primary/20 hover:border-primary/40 transition-all cursor-pointer group">
-                  <div className="text-center space-y-2">
-                    <div className="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <Video className="h-8 w-8 text-primary" />
-                    </div>
-                    <p className="text-sm font-medium">Click to play video introduction</p>
-                  </div>
-                </div>
-              </CardContent>
             </Card>
 
-            {/* Smart Ranking */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  Smart Ranking
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <RadarChart data={skillData}>
-                    <PolarGrid stroke="hsl(var(--border))" />
-                    <PolarAngleAxis 
-                      dataKey="subject" 
-                      tick={{ fill: 'hsl(var(--foreground))', fontSize: 12 }}
-                    />
-                    <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                    <Radar 
-                      name="Skills" 
-                      dataKey="A" 
-                      stroke="hsl(var(--primary))" 
-                      fill="hsl(var(--primary))" 
-                      fillOpacity={0.6} 
-                    />
-                  </RadarChart>
-                </ResponsiveContainer>
-                <div className="grid grid-cols-3 gap-4 mt-4">
-                  {skillData.map((skill) => (
-                    <div key={skill.subject} className="text-center">
-                      <p className="text-xs text-muted-foreground mb-1">{skill.subject}</p>
-                      <p className="text-lg font-bold text-primary">{skill.A}%</p>
-                    </div>
+            {/* Video Resume Section */}
+            <Card className="glass-card border-border/50 p-6">
+              <div className="aspect-video bg-gradient-to-br from-muted/50 to-muted/30 rounded-lg flex items-center justify-center border border-border/50 hover:border-primary/50 transition-all cursor-pointer group mb-6">
+                <button 
+                  className="w-20 h-20 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"
+                  onClick={() => setIsVideoPlaying(true)}
+                >
+                  <Play className="h-10 w-10 text-foreground fill-foreground ml-1" />
+                </button>
+              </div>
+
+              <p className="text-muted-foreground mb-6 leading-relaxed">
+                In my previous role, I led the development of a major e-commerce application.
+                I have extensive experience working with user interfaces.
+              </p>
+
+              <div>
+                <h3 className="text-lg font-bold mb-4">Key Highlights</h3>
+                <div className="flex flex-wrap gap-2">
+                  {keyHighlights.map((highlight) => (
+                    <Badge 
+                      key={highlight} 
+                      variant="outline" 
+                      className="px-4 py-2 text-sm border-border hover:border-primary/50 transition-colors"
+                    >
+                      {highlight}
+                    </Badge>
                   ))}
                 </div>
-              </CardContent>
+              </div>
             </Card>
 
-            {/* Resume & Documents */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                  Resume & Documents
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <DocumentItem
-                  icon={<Sparkles className="h-4 w-4" />}
-                  title="AI-Generated SmartResume"
-                  subtitle="Optimized for ATS"
-                  badge="New"
-                />
-                <DocumentItem
-                  icon={<FileText className="h-4 w-4" />}
-                  title="Resume.pdf"
-                  subtitle="Updated 2 days ago"
-                />
-                <DocumentItem
-                  icon={<Award className="h-4 w-4" />}
-                  title="Certificates"
-                  subtitle="5 certificates"
-                />
-                <div className="pt-2 space-y-2">
-                  <p className="text-sm font-semibold">Portfolio Links</p>
-                  <div className="flex flex-wrap gap-2">
-                    <Badge variant="outline" className="gap-1 hover:bg-primary/10 cursor-pointer">
-                      <Github className="h-3 w-3" />
-                      GitHub
-                      <ExternalLink className="h-3 w-3" />
-                    </Badge>
-                    <Badge variant="outline" className="gap-1 hover:bg-primary/10 cursor-pointer">
-                      <Linkedin className="h-3 w-3" />
-                      LinkedIn
-                      <ExternalLink className="h-3 w-3" />
-                    </Badge>
-                    <Badge variant="outline" className="gap-1 hover:bg-primary/10 cursor-pointer">
-                      <ExternalLink className="h-3 w-3" />
-                      Portfolio
-                    </Badge>
+            {/* Role-Specific Skills */}
+            <Card className="glass-card border-border/50 p-6">
+              <h3 className="text-lg font-bold mb-6">Role-Specific Skills</h3>
+              <div className="space-y-5">
+                {roleSpecificSkills.map((skill) => (
+                  <div key={skill.name} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {skill.icon}
+                        <span className="font-semibold">{skill.name}</span>
+                      </div>
+                      <span className="font-bold text-lg">{skill.score}</span>
+                    </div>
+                    <Progress value={skill.score * 10} className="h-2" />
                   </div>
-                </div>
-              </CardContent>
+                ))}
+              </div>
+            </Card>
+
+            {/* AI Summary */}
+            <Card className="glass-card border-border/50 p-6">
+              <h3 className="text-lg font-bold mb-4">AI Summary</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {candidateData.summary}
+              </p>
             </Card>
           </div>
 
           {/* Right Column */}
-          <div className="space-y-8">
-            {/* Job Application Tracking */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-lg">Application Tracking</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <ApplicationStage
-                    icon={<CheckCircle2 className="h-5 w-5" />}
-                    title="Applied"
-                    status="Completed"
-                    date="Dec 10"
-                    isActive
-                  />
-                  <ApplicationStage
-                    icon={<CheckCircle2 className="h-5 w-5" />}
-                    title="Shortlisted"
-                    status="Completed"
-                    date="Dec 12"
-                    isActive
-                  />
-                  <ApplicationStage
-                    icon={<Clock className="h-5 w-5" />}
-                    title="Interview"
-                    status="Upcoming"
-                    date="Dec 15"
-                    isActive
-                  />
-                  <ApplicationStage
-                    icon={<AlertCircle className="h-5 w-5" />}
-                    title="Final Round"
-                    status="Pending"
-                    isActive={false}
-                  />
-                </div>
-              </CardContent>
+          <div className="space-y-6">
+            {/* Action Buttons */}
+            <div className="space-y-3">
+              <Button 
+                className="w-full h-12 bg-teal-500 hover:bg-teal-600 text-white text-base"
+                onClick={() => toast({ title: "Opening full video resume..." })}
+              >
+                <Video className="mr-2 h-5 w-5" />
+                View Full Video Resume
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full h-12 text-base"
+                onClick={() => toast({ title: "Opening interview scheduler..." })}
+              >
+                <Calendar className="mr-2 h-5 w-5" />
+                Schedule Interview
+              </Button>
+            </div>
+
+            {/* AI-Evaluated Skills */}
+            <Card className="glass-card border-border/50 p-6">
+              <h3 className="text-lg font-bold mb-6">AI-Evaluated Skills</h3>
+              <div className="space-y-5">
+                {aiSkills.map((skill) => (
+                  <div key={skill.name} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold">{skill.name}</span>
+                      <span className="font-bold text-lg">{skill.score}</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div 
+                        className={`h-full ${skill.color} rounded-full transition-all`}
+                        style={{ width: `${skill.score * 10}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </Card>
 
-            {/* Assignments & Tests */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
-                  Screening Tests
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <TestItem
-                  title="React Assessment"
-                  status="Completed"
-                  score="92%"
-                />
-                <TestItem
-                  title="System Design"
-                  status="In Progress"
-                  score="45%"
-                />
-                <TestItem
-                  title="Coding Challenge"
-                  status="Pending"
-                />
-              </CardContent>
+            {/* Work History Timeline */}
+            <Card className="glass-card border-border/50 p-6">
+              <h3 className="text-lg font-bold mb-6">AI Summary</h3>
+              <div className="space-y-6">
+                {workHistory.map((job, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="flex flex-col items-center">
+                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                        {job.icon}
+                      </div>
+                      {index < workHistory.length - 1 && (
+                        <div className="w-0.5 h-full bg-border mt-2" />
+                      )}
+                    </div>
+                    <div className="flex-1 pb-6">
+                      <h4 className="font-bold mb-1">{job.company}</h4>
+                      <p className="text-sm text-muted-foreground mb-1">{job.role}</p>
+                      <p className="text-sm text-muted-foreground">{job.duration}</p>
+                      {job.note && (
+                        <p className="text-sm text-muted-foreground mt-1 italic">{job.note}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </Card>
 
-            {/* Recommendations */}
-            <Card className="glass-card border-primary/20">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary" />
-                  AI Suggestions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <RecommendationItem
-                  icon={<TrendingUp className="h-4 w-4" />}
-                  title="Data Scientist"
-                  subtitle="95% Match"
-                  type="job"
-                />
-                <RecommendationItem
-                  icon={<BookOpen className="h-4 w-4" />}
-                  title="Machine Learning Course"
-                  subtitle="Upskill recommendation"
-                  type="course"
-                />
-                <RecommendationItem
-                  icon={<TrendingUp className="h-4 w-4" />}
-                  title="Senior Frontend Engineer"
-                  subtitle="88% Match"
-                  type="job"
-                />
-              </CardContent>
-            </Card>
+            {/* Final CTA */}
+            <Button 
+              className="w-full h-12 bg-teal-500 hover:bg-teal-600 text-white text-base"
+              onClick={() => toast({ 
+                title: "Invitation Sent!", 
+                description: "Candidate has been invited for the second round" 
+              })}
+            >
+              Invite for Second Round
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Video Modal Placeholder */}
+      {isVideoPlaying && (
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setIsVideoPlaying(false)}
+        >
+          <div className="relative w-full max-w-4xl aspect-video bg-muted rounded-lg flex items-center justify-center">
+            <p className="text-muted-foreground">Video player will be integrated here</p>
+            <button 
+              className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center"
+              onClick={() => setIsVideoPlaying(false)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
-const DocumentItem = ({ icon, title, subtitle, badge }: { icon: React.ReactNode; title: string; subtitle: string; badge?: string }) => (
-  <div className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 transition-all cursor-pointer glass-card">
-    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-      {icon}
-    </div>
-    <div className="flex-1">
-      <div className="flex items-center gap-2">
-        <p className="text-sm font-semibold">{title}</p>
-        {badge && <Badge variant="secondary" className="text-xs">{badge}</Badge>}
-      </div>
-      <p className="text-xs text-muted-foreground">{subtitle}</p>
-    </div>
-    <ExternalLink className="h-4 w-4 text-muted-foreground" />
-  </div>
-);
-
-const ApplicationStage = ({ icon, title, status, date, isActive }: { icon: React.ReactNode; title: string; status: string; date?: string; isActive: boolean }) => (
-  <div className="flex items-start gap-3">
-    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-      {icon}
-    </div>
-    <div className="flex-1">
-      <p className="font-semibold">{title}</p>
-      <p className="text-xs text-muted-foreground">{status}</p>
-      {date && <p className="text-xs text-muted-foreground mt-1">{date}</p>}
-    </div>
-  </div>
-);
-
-const TestItem = ({ title, status, score }: { title: string; status: string; score?: string }) => (
-  <div className="flex items-center justify-between p-3 rounded-lg border border-border glass-card">
-    <div>
-      <p className="text-sm font-semibold">{title}</p>
-      <p className="text-xs text-muted-foreground">{status}</p>
-    </div>
-    {score && <Badge variant="secondary" className="bg-primary/10 text-primary">{score}</Badge>}
-  </div>
-);
-
-const RecommendationItem = ({ icon, title, subtitle, type }: { icon: React.ReactNode; title: string; subtitle: string; type: 'job' | 'course' }) => (
-  <div className="flex items-center gap-3 p-3 rounded-lg border border-border hover:border-primary/50 transition-all cursor-pointer glass-card">
-    <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${type === 'job' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'}`}>
-      {icon}
-    </div>
-    <div className="flex-1">
-      <p className="text-sm font-semibold">{title}</p>
-      <p className="text-xs text-muted-foreground">{subtitle}</p>
-    </div>
-    <ExternalLink className="h-4 w-4 text-muted-foreground" />
-  </div>
-);
 
 export default CandidateProfile;
