@@ -179,6 +179,30 @@ export type Database = {
         }
         Relationships: []
       }
+      candidate_soft_skills: {
+        Row: {
+          candidate_id: string
+          created_at: string | null
+          id: string
+          proficiency_level: string | null
+          skill_name: string
+        }
+        Insert: {
+          candidate_id: string
+          created_at?: string | null
+          id?: string
+          proficiency_level?: string | null
+          skill_name: string
+        }
+        Update: {
+          candidate_id?: string
+          created_at?: string | null
+          id?: string
+          proficiency_level?: string | null
+          skill_name?: string
+        }
+        Relationships: []
+      }
       interview_questions: {
         Row: {
           created_at: string | null
@@ -259,6 +283,56 @@ export type Database = {
           },
         ]
       }
+      job_matches: {
+        Row: {
+          candidate_id: string
+          communication_score: number | null
+          created_at: string | null
+          experience_score: number | null
+          hard_skills_score: number | null
+          id: string
+          job_id: string
+          match_score: number
+          score_breakdown: Json | null
+          soft_skills_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          candidate_id: string
+          communication_score?: number | null
+          created_at?: string | null
+          experience_score?: number | null
+          hard_skills_score?: number | null
+          id?: string
+          job_id: string
+          match_score: number
+          score_breakdown?: Json | null
+          soft_skills_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          candidate_id?: string
+          communication_score?: number | null
+          created_at?: string | null
+          experience_score?: number | null
+          hard_skills_score?: number | null
+          id?: string
+          job_id?: string
+          match_score?: number
+          score_breakdown?: Json | null
+          soft_skills_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_matches_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jobs: {
         Row: {
           application_deadline: string | null
@@ -275,7 +349,11 @@ export type Database = {
           job_responsibilities: string | null
           key_qualifications: string | null
           location: string | null
+          minimum_years_experience: number | null
           num_openings: number | null
+          preferred_skills: Json | null
+          required_hard_skills: Json | null
+          required_soft_skills: Json | null
           requirements: string[] | null
           salary_max: number | null
           salary_min: number | null
@@ -299,7 +377,11 @@ export type Database = {
           job_responsibilities?: string | null
           key_qualifications?: string | null
           location?: string | null
+          minimum_years_experience?: number | null
           num_openings?: number | null
+          preferred_skills?: Json | null
+          required_hard_skills?: Json | null
+          required_soft_skills?: Json | null
           requirements?: string[] | null
           salary_max?: number | null
           salary_min?: number | null
@@ -323,7 +405,11 @@ export type Database = {
           job_responsibilities?: string | null
           key_qualifications?: string | null
           location?: string | null
+          minimum_years_experience?: number | null
           num_openings?: number | null
+          preferred_skills?: Json | null
+          required_hard_skills?: Json | null
+          required_soft_skills?: Json | null
           requirements?: string[] | null
           salary_max?: number | null
           salary_min?: number | null
@@ -338,14 +424,17 @@ export type Database = {
         Row: {
           address: string | null
           avatar_url: string | null
+          behavioral_score: number | null
           bio: string | null
           city: string | null
+          communication_score: number | null
           company_description: string | null
           company_name: string | null
           country: string | null
           created_at: string | null
           date_of_birth: string | null
           designation: string | null
+          desired_role: string | null
           education_background: string | null
           email: string | null
           employee_count: string | null
@@ -353,30 +442,38 @@ export type Database = {
           id: string
           industry: string | null
           is_verified: boolean | null
+          knowledge_score: number | null
           linkedin_profile: string | null
           location: string | null
+          number_of_companies: number | null
           overall_candidate_score: number | null
           phone: string | null
           pincode: string | null
+          preferred_domain: string | null
           previous_experience: string | null
           profile_completion_status: string | null
+          projects_handled: number | null
           role: string | null
           state: string | null
           updated_at: string | null
           user_id: string
           website: string | null
+          years_of_experience: number | null
         }
         Insert: {
           address?: string | null
           avatar_url?: string | null
+          behavioral_score?: number | null
           bio?: string | null
           city?: string | null
+          communication_score?: number | null
           company_description?: string | null
           company_name?: string | null
           country?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           designation?: string | null
+          desired_role?: string | null
           education_background?: string | null
           email?: string | null
           employee_count?: string | null
@@ -384,30 +481,38 @@ export type Database = {
           id?: string
           industry?: string | null
           is_verified?: boolean | null
+          knowledge_score?: number | null
           linkedin_profile?: string | null
           location?: string | null
+          number_of_companies?: number | null
           overall_candidate_score?: number | null
           phone?: string | null
           pincode?: string | null
+          preferred_domain?: string | null
           previous_experience?: string | null
           profile_completion_status?: string | null
+          projects_handled?: number | null
           role?: string | null
           state?: string | null
           updated_at?: string | null
           user_id: string
           website?: string | null
+          years_of_experience?: number | null
         }
         Update: {
           address?: string | null
           avatar_url?: string | null
+          behavioral_score?: number | null
           bio?: string | null
           city?: string | null
+          communication_score?: number | null
           company_description?: string | null
           company_name?: string | null
           country?: string | null
           created_at?: string | null
           date_of_birth?: string | null
           designation?: string | null
+          desired_role?: string | null
           education_background?: string | null
           email?: string | null
           employee_count?: string | null
@@ -415,18 +520,23 @@ export type Database = {
           id?: string
           industry?: string | null
           is_verified?: boolean | null
+          knowledge_score?: number | null
           linkedin_profile?: string | null
           location?: string | null
+          number_of_companies?: number | null
           overall_candidate_score?: number | null
           phone?: string | null
           pincode?: string | null
+          preferred_domain?: string | null
           previous_experience?: string | null
           profile_completion_status?: string | null
+          projects_handled?: number | null
           role?: string | null
           state?: string | null
           updated_at?: string | null
           user_id?: string
           website?: string | null
+          years_of_experience?: number | null
         }
         Relationships: []
       }
