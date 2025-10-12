@@ -195,18 +195,25 @@ export default function PostJob() {
           is_draft: isDraft,
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Job insertion error:", error);
+        throw error;
+      }
 
       toast({
         title: isDraft ? "Saved as Draft!" : "Job Posted Successfully!",
         description: isDraft ? "Your job has been saved as draft" : "Your job posting is now live",
       });
 
-      navigate("/employer/dashboard");
+      // Small delay to ensure database operation completes
+      setTimeout(() => {
+        navigate("/employer/dashboard", { replace: true });
+      }, 500);
     } catch (error: any) {
+      console.error("Job posting error:", error);
       toast({
         title: "Failed to Post Job",
-        description: error.message,
+        description: error.message || "An error occurred while posting the job",
         variant: "destructive",
       });
     } finally {
