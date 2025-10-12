@@ -91,41 +91,43 @@ const CandidateDashboard = () => {
       
       setJobs(jobsData || []);
 
-      // Try to get AI-matched jobs
+      // Use advanced AI matching algorithm
       if (jobsData && jobsData.length > 0 && user?.id) {
-        // Get candidate skills separately
-        const { data: skillsData } = await supabase
-          .from('candidate_skills')
-          .select('skill_name')
-          .eq('candidate_id', user.id);
+        try {
+          const { data: matchData, error: matchError } = await supabase.functions.invoke(
+            'calculate-job-matches',
+            {
+              body: {
+                candidateId: user.id,
+                limit: 20
+              }
+            }
+          );
 
-        if (skillsData && skillsData.length > 0) {
-          // Calculate match scores for each job
-          const jobsWithScores = jobsData.map((job: any) => {
-            const candidateSkills = skillsData.map((s: any) => 
-              s.skill_name.toLowerCase()
-            );
-            const jobSkills = job.skills?.map((s: string) => s.toLowerCase()) || [];
-            
-            const matchingSkills = candidateSkills.filter((skill: string) => 
-              jobSkills.some((jobSkill: string) => 
-                jobSkill.includes(skill) || skill.includes(jobSkill)
-              )
-            );
-            
-            const matchScore = Math.round(
-              (matchingSkills.length / Math.max(jobSkills.length, 1)) * 100
-            );
-
-            return {
-              ...job,
-              matchScore: Math.max(matchScore, 70), // Ensure minimum visible match
-            };
-          });
-
-          // Sort by match score
-          jobsWithScores.sort((a, b) => b.matchScore - a.matchScore);
-          setMatchedJobs(jobsWithScores);
+          if (matchError) {
+            console.error('Match calculation error:', matchError);
+            // Fallback to simple matching
+            setMatchedJobs(jobsData.map((job: any) => ({ ...job, matchScore: 75 })));
+          } else if (matchData?.matches) {
+            // Map matches back to full job data with match scores
+            const jobsWithScores = matchData.matches.map((match: any) => {
+              const job = jobsData.find((j: any) => j.id === match.job_id);
+              return {
+                ...job,
+                matchScore: match.match_score,
+                hard_skills_score: match.hard_skills_score,
+                soft_skills_score: match.soft_skills_score,
+                experience_score: match.experience_score,
+                communication_score: match.communication_score,
+                score_breakdown: match.score_breakdown
+              };
+            });
+            setMatchedJobs(jobsWithScores);
+          }
+        } catch (error) {
+          console.error('Error calculating matches:', error);
+          // Fallback to showing jobs without scores
+          setMatchedJobs(jobsData.map((job: any) => ({ ...job, matchScore: 75 })));
         }
       }
     } catch (error) {

@@ -20,3 +20,9 @@ verify_jwt = true
 
 [functions.schedule-interview]
 verify_jwt = true
+
+[functions.calculate-job-matches]
+verify_jwt = true
+
+[functions.get-top-candidates]
+verify_jwt = true
