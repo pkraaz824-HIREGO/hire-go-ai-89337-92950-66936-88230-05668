@@ -15,6 +15,7 @@ import InterviewQuestions from "./pages/candidate/InterviewQuestions";
 import EmployerDashboard from "./pages/employer/DashboardWithTabs";
 import EmployerOnboarding from "./pages/employer/Onboarding";
 import PostJob from "./pages/employer/PostJob";
+import AdminDashboard from "./pages/admin/Dashboard";
 import LiveInterview from "./pages/LiveInterview";
 import NotFound from "./pages/NotFound";
 
@@ -70,7 +71,12 @@ const App = () => (
                 <PostJob />
               </ProtectedRoute>
             } />
-            <Route path="/live-interview" element={<LiveInterview />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/interview/:interviewId" element={
+              <ProtectedRoute>
+                <LiveInterview />
+              </ProtectedRoute>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
