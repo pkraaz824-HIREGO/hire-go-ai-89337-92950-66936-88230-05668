@@ -38,6 +38,13 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
     
+    /* Space Theme Variables */
+    --space-bg: 217 33% 8%;
+    --space-bg-deep: 217 33% 5%;
+    --cyan-glow: 191 97% 77%;
+    --purple-primary: 270 91% 65%;
+    --card-dark: 217 24% 12%;
+    
     --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(221 83% 53%) 100%);
     --gradient-accent: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(191 97% 77%) 100%);
     --gradient-hero: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(221 83% 53%) 50%, hsl(191 97% 77%) 100%);
@@ -130,6 +137,13 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 217 24% 25%;
     --sidebar-ring: 217 91% 60%;
+    
+    /* Space Theme Variables for Dark Mode */
+    --space-bg: 217 33% 8%;
+    --space-bg-deep: 217 33% 5%;
+    --cyan-glow: 191 97% 77%;
+    --purple-primary: 270 91% 65%;
+    --card-dark: 217 24% 12%;
   }
 }
 
@@ -166,5 +180,51 @@ All colors MUST be HSL.
   
   .gradient-bg {
     background: var(--gradient-background);
+  }
+  
+  /* Space Theme Animations */
+  @keyframes floatingStar {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translateY(-20px) translateX(10px);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--cyan-glow) / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--cyan-glow) / 0.6);
+    }
+  }
+  
+  @keyframes float3D {
+    0%, 100% {
+      transform: translateY(0) rotateX(5deg) rotateY(5deg);
+    }
+    50% {
+      transform: translateY(-10px) rotateX(-5deg) rotateY(-5deg);
+    }
+  }
+  
+  @keyframes orbitCandidate {
+    0% {
+      transform: translateY(0) scale(1);
+    }
+    50% {
+      transform: translateY(-5px) scale(1.05);
+    }
+    100% {
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  .space-background {
+    background: linear-gradient(180deg, hsl(var(--space-bg)) 0%, hsl(var(--space-bg-deep)) 100%);
   }
 }
